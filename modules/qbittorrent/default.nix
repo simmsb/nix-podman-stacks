@@ -222,7 +222,7 @@ in {
         volumeMap = {
           config = "${storage}/${qbittorrentName}:/config";
           media = "${mediaStorage}:/media";
-          downloads = "/media/downloads:/downloads";
+          downloads = "/${mediaStorage}/downloads:/downloads";
         };
 
         environment = {
