@@ -264,6 +264,7 @@ in {
             volumeMap = {
               config = "${storage}/${jellyfinName}:/config";
               media = "${mediaStorage}:/media";
+              downloads = "/${mediaStorage}/downloads:/downloads";
               brandingXml = lib.mkIf (cfg.jellyfin.oidc.enable) "${brandingXml}:/config/branding.xml";
             };
 
@@ -324,6 +325,7 @@ in {
           volumeMap = {
             data = "${storage}/${maintainerrName}/data:/opt/data";
             media = "${mediaStorage}:/media";
+            downloads = "/${mediaStorage}/downloads:/downloads";
           };
 
           port = 6246;
