@@ -201,8 +201,6 @@ in {
           }
           // cfg.gluetun.extraEnv;
 
-        network = [config.nps.stacks.traefik.network.name];
-
         stack = name;
         port = 8888;
         dashboard = {
@@ -224,6 +222,7 @@ in {
         volumeMap = {
           config = "${storage}/${qbittorrentName}:/config";
           media = "${mediaStorage}:/media";
+          downloads = "/media/downloads:/downloads";
         };
 
         environment = {
