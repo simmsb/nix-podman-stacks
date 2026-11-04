@@ -1,6 +1,7 @@
 let
   modules = {
     settings = ./settings.nix;
+    inspection = ./inspection.nix;
     adguard = ./adguard;
     adventurelog = ./adventurelog;
     aiostreams = ./aiostreams;
@@ -8,6 +9,7 @@ let
     audiobookshelf = ./audiobookshelf;
     authelia = ./authelia;
     baikal = ./baikal;
+    bambuddy = ./bambuddy;
     bentopdf = ./bentopdf;
     beszel = ./beszel;
     blocky = ./blocky;

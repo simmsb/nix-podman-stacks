@@ -107,7 +107,7 @@ in {
 
     services.podman.containers = {
       ${name} = {
-        image = "ghcr.io/karakeep-app/karakeep:0.33.2";
+        image = "ghcr.io/karakeep-app/karakeep:0.34.1";
         volumeMap.data = "${storage}/data:/data";
         environment = {
           DATA_DIR = "/data";
@@ -141,7 +141,7 @@ in {
       };
 
       ${chromeName} = {
-        image = "ghcr.io/karakeep-app/karakeep-chrome:154.0.8037.57-r1";
+        image = "ghcr.io/karakeep-app/karakeep-chrome:157.0.8103.38-r1";
         exec = lib.concatStringsSep " " [
           "--disable-gpu"
           "--disable-dev-shm-usage"

@@ -26,7 +26,7 @@
     stackName = name;
   };
 in {
-  imports = import ../mkAliases.nix config lib name [name];
+  imports = import ../mkAliases.nix config lib name (arrlib.arrContainerNames [name]);
 
   options.nps.stacks.${name} = let
     o = arrlib.mkArrOptions name;
@@ -56,7 +56,7 @@ in {
         ${name} =
           arrlib.mkArrBase name
           // {
-            image = "lscr.io/linuxserver/prowlarr:2.6.5";
+            image = "lscr.io/linuxserver/prowlarr:2.7.0";
             port = 9696;
 
             dashboard = {

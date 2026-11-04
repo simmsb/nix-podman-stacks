@@ -10,6 +10,7 @@
   sonarrName = "sonarr";
   radarrName = "radarr";
   bazarrName = "bazarr";
+  arrNames = [sonarrName radarrName bazarrName];
   seerrName = "seerr";
   profilarrName = "profilarr";
   profilarrParserName = "${profilarrName}-parser";
@@ -50,9 +51,7 @@
 in {
   imports = import ../mkAliases.nix config lib stackName [
     jellyfinName
-    sonarrName
-    radarrName
-    bazarrName
+    (arrlib.arrContainerNames arrNames)
     seerrName
     profilarrName
     profilarrParserName
@@ -151,15 +150,7 @@ in {
       ${seerrName}.enable = lib.mkEnableOption "Seerr";
       ${maintainerrName}.enable = lib.mkEnableOption "Maintainerr";
     }
-    // (
-      lib.genAttrs
-      [
-        sonarrName
-        radarrName
-        bazarrName
-      ]
-      arrlib.mkArrOptions
-    );
+    // lib.genAttrs arrNames arrlib.mkArrOptions;
 
   config = lib.mkIf cfg.enable {
     # Enable qBittorrent stack. Attach Gluetun to the streaming network when the VPN is enabled, otherwise qBittorrent directly
@@ -260,7 +251,7 @@ in {
         in
           lib.mkIf cfg.jellyfin.enable {
             # renovate: versioning=regex:^version-(?<major>\d+)\.(?<minor>\d+)(?:\.(?<patch>\d+))?(?<compatibility>ubu\d+)$
-            image = "lscr.io/linuxserver/jellyfin:version-12.2ubu2604";
+            image = "lscr.io/linuxserver/jellyfin:version-12.4ubu2604";
             volumeMap = {
               config = "${storage}/${jellyfinName}:/config";
               media = "${mediaStorage}:/media";
@@ -303,7 +294,7 @@ in {
           };
 
         ${seerrName} = lib.mkIf cfg.seerr.enable {
-          image = "ghcr.io/seerr-team/seerr:v3.5.0";
+          image = "ghcr.io/seerr-team/seerr:v3.5.1";
           user = "${toString config.nps.defaultUid}:${toString config.nps.defaultGid}";
           volumeMap.config = "${storage}/${seerrName}/config:/app/config";
           environment.PORT = 5055;
@@ -320,7 +311,7 @@ in {
         };
 
         ${maintainerrName} = lib.mkIf cfg.maintainerr.enable {
-          image = "ghcr.io/maintainerr/maintainerr:3.30.2";
+          image = "ghcr.io/maintainerr/maintainerr:3.31.0";
           user = "${toString config.nps.defaultUid}:${toString config.nps.defaultGid}";
           volumeMap = {
             data = "${storage}/${maintainerrName}/data:/opt/data";
@@ -340,7 +331,7 @@ in {
         };
 
         ${profilarrName} = lib.mkIf cfg.profilarr.enable {
-          image = "ghcr.io/dictionarry-hub/profilarr:2.2.0";
+          image = "ghcr.io/dictionarry-hub/profilarr:2.3.1";
           volumeMap.config = "${storage}/${profilarrName}/config:/config";
 
           extraEnv =
@@ -374,7 +365,7 @@ in {
         };
 
         ${profilarrParserName} = lib.mkIf cfg.profilarr.enableParser {
-          image = "ghcr.io/dictionarry-hub/profilarr-parser:2.2.0";
+          image = "ghcr.io/dictionarry-hub/profilarr-parser:2.3.1";
           stack = stackName;
           dashboard = {
             inherit category;
@@ -426,6 +417,6 @@ in {
             homepage.settings.widget.type = "bazarr";
           });
       }
-      // arrlib.arrDbs [sonarrName radarrName bazarrName];
+      // arrlib.arrDbs arrNames;
   };
 }

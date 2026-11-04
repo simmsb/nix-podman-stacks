@@ -216,7 +216,7 @@ in {
       };
 
       ${qbittorrentName} = {
-        image = "docker.io/linuxserver/qbittorrent:5.2.4";
+        image = "docker.io/linuxserver/qbittorrent:5.3.0";
 
         network = lib.mkIf cfg.gluetun.enable (lib.mkForce ["container:${gluetunName}"]);
         volumeMap = {
@@ -248,7 +248,7 @@ in {
       };
 
       ${quiName} = lib.mkIf cfg.qui.enable {
-        image = "ghcr.io/autobrr/qui:v1.33.0";
+        image = "ghcr.io/autobrr/qui:v1.35.0";
         volumeMap = {
           config = "${storage}/${quiName}:/config";
           media = "${mediaStorage}:/media";

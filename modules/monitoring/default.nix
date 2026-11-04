@@ -434,7 +434,7 @@ in {
 
     services.podman.containers = {
       ${grafanaName} = lib.mkIf cfg.grafana.enable {
-        image = "docker.io/grafana/grafana:13.2.4";
+        image = "docker.io/grafana/grafana:13.3.0";
         user = config.nps.defaultUid;
         volumeMap = {
           data = "${storage}/grafana/data:/var/lib/grafana";
@@ -489,7 +489,7 @@ in {
       };
 
       ${lokiName} = lib.mkIf cfg.loki.enable {
-        image = "docker.io/grafana/loki:3.7.8";
+        image = "docker.io/grafana/loki:3.7.9";
         exec = "-config.file=/etc/loki/local-config.yaml";
         user = config.nps.defaultUid;
         volumeMap = {
@@ -510,7 +510,7 @@ in {
         configDst = "/etc/alloy/config.alloy";
       in
         lib.mkIf cfg.alloy.enable {
-          image = "docker.io/grafana/alloy:v1.21.0";
+          image = "docker.io/grafana/alloy:v1.21.3";
           volumeMap.settings = "${cfg.alloy.config}:${configDst}";
           exec = "run --server.http.listen-addr=0.0.0.0:${toString cfg.alloy.port} --storage.path=/var/lib/alloy/data ${configDst}";
 
@@ -529,7 +529,7 @@ in {
         configDst = "/etc/prometheus/prometheus.yml";
       in
         lib.mkIf cfg.prometheus.enable {
-          image = "docker.io/prom/prometheus:v3.15.0";
+          image = "docker.io/prom/prometheus:v3.15.1";
           exec = "--config.file=${configDst}";
           user = config.nps.defaultUid;
           volumeMap = {
@@ -571,7 +571,7 @@ in {
       };
 
       ${alertmanagerName} = lib.mkIf cfg.alertmanager.enable {
-        image = "docker.io/prom/alertmanager:v0.34.1";
+        image = "docker.io/prom/alertmanager:v0.34.2";
         user = config.nps.defaultUid;
         volumeMap = {
           settings = "${cfg.alertmanager.settings}:/config/alertmanager.yml";

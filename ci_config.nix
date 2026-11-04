@@ -95,6 +95,18 @@ in {
 
       baikal.enable = true;
 
+      bambuddy = {
+        enable = true;
+        oidc = {
+          enable = true;
+          clientSecretFile = dummySecretFile;
+          clientSecretHash = dummyClientSecretHash;
+        };
+        orcaSlicer.enable = true;
+        bambuStudio.enable = true;
+        virtualPrinter.enable = true;
+      };
+
       bentopdf.enable = true;
 
       beszel = {
@@ -704,6 +716,7 @@ in {
         enable = true;
         masterKeyFile = dummySecretFile;
         db.passwordFile = dummySecretFile;
+        cdpTokenFile = dummySecretFile;
         oidc = {
           enable = true;
           clientSecretFile = dummySecretFile;
@@ -806,6 +819,10 @@ in {
 
       prowlarr = {
         enable = true;
+        db = {
+          type = "postgres";
+          passwordFile = dummySecretFile;
+        };
         extraEnv."PROWLARR__AUTH__APIKEY".fromFile = dummySecretFile;
       };
 
@@ -967,6 +984,10 @@ in {
           maintainerr.enable = true;
         }
         // lib.genAttrs ["sonarr" "radarr" "bazarr"] (name: {
+          db = {
+            type = "postgres";
+            passwordFile = dummySecretFile;
+          };
           extraEnv."${lib.toUpper name}__AUTH__APIKEY".fromFile = dummySecretFile;
         });
 
