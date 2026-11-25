@@ -58,7 +58,7 @@ in {
       configDst = "/etc/sablier/sablier.yml";
     in {
       ${name} = {
-        image = "ghcr.io/sablierapp/sablier:1.19.1";
+        image = "ghcr.io/sablierapp/sablier:1.21.1";
 
         volumeMap = {
           config = "${cfg.settings}:${configDst}";

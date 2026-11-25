@@ -69,12 +69,13 @@ There is also an [Option Search](https://tarow.github.io/nix-podman-stacks/searc
 
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/adguard-home.svg" style="width:1em;height:1em;" /> [Adguard](https://tarow.github.io/nix-podman-stacks/docs/stacks/adguard.html)
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/adventure-log.webp" style="width:1em;height:1em;" /> [AdventureLog](https://tarow.github.io/nix-podman-stacks/docs/stacks/adventurelog.html)
+- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/agentgateway.svg" style="width:1em;height:1em;" /> [Agentgateway](https://tarow.github.io/nix-podman-stacks/docs/stacks/agentgateway.html)
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/stremio.svg" style="width:1em;height:1em;" /> [AIOStreams](https://tarow.github.io/nix-podman-stacks/docs/stacks/aiostreams.html)
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/anchor.svg" style="width:1em;height:1em;" /> [Anchor](https://tarow.github.io/nix-podman-stacks/docs/stacks/anchor.html)
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/audiobookshelf.svg" style="height:1em;" /> [Audiobookshelf](https://tarow.github.io/nix-podman-stacks/docs/stacks/audiobookshelf.html)
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/authelia.svg" style="height:1em;" /> [Authelia](https://tarow.github.io/nix-podman-stacks/docs/stacks/authelia.html)
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/baikal.png" style="width:1em;height:1em;" /> [Baikal](https://tarow.github.io/nix-podman-stacks/docs/stacks/baikal.html)
-- <img src="https://raw.githubusercontent.com/maziggy/bambuddy/v1.2.5.7/static/img/bambuddy_logo_dark_transparent.png" style="width:1em;height:1em;" /> [Bambuddy](https://tarow.github.io/nix-podman-stacks/docs/stacks/bambuddy.html)
+- <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/webp/bambuddy.webp" style="width:1em;height:1em;" /> [Bambuddy](https://tarow.github.io/nix-podman-stacks/docs/stacks/bambuddy.html)
   - Bambuddy
   - OrcaSlicer API
   - Bambu Studio API

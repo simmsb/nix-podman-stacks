@@ -68,7 +68,7 @@ in {
   config = lib.mkIf cfg.enable {
     services.podman.containers = {
       ${name} = {
-        image = "docker.io/johannesjo/super-productivity:v19.3.1";
+        image = "docker.io/johannesjo/super-productivity:v20.1.0";
 
         stack = name;
         port = 80;
@@ -82,7 +82,7 @@ in {
       };
 
       ${syncName} = lib.mkIf cfg.enableSync {
-        image = "ghcr.io/warreth/super-sync-server:v19.3.1";
+        image = "ghcr.io/warreth/super-sync-server:v20.1.0";
         stack = name;
 
         volumeMap.data = "${storage}/supersync:/data";

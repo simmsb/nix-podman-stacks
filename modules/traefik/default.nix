@@ -231,7 +231,7 @@ in {
         (lib.mkIf cfg.crowdsec.middleware.enable {
           experimental.plugins.bouncer = {
             moduleName = "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin";
-            version = "v1.8.1";
+            version = "v1.8.2";
           };
         })
       ];
@@ -307,7 +307,7 @@ in {
     };
 
     services.podman.containers.${name} = rec {
-      image = "docker.io/traefik:v3.7.17";
+      image = "docker.io/traefik:v3.8.0";
 
       socketActivation = [
         {

@@ -150,7 +150,30 @@ in {
       ${seerrName}.enable = lib.mkEnableOption "Seerr";
       ${maintainerrName}.enable = lib.mkEnableOption "Maintainerr";
     }
-    // lib.genAttrs arrNames arrlib.mkArrOptions;
+    // lib.genAttrs arrNames (
+      name:
+        arrlib.mkArrOptions name
+        // lib.optionalAttrs (name == radarrName) {
+          oidc = {
+            enable = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether to enable OIDC login with Authelia. This will register an OIDC client in Authelia
+                and setup the necessary configuration.
+              '';
+            };
+            clientSecretFile = (import ../authelia/options.nix lib).clientSecretFile;
+            clientSecretHash = (import ../authelia/options.nix lib).derivableClientSecretHash cfg.radarr.oidc.clientSecretFile;
+            userEmail = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                Email address of the single user allowed to log in to Radarr via OIDC.
+              '';
+            };
+          };
+        }
+    );
 
   config = lib.mkIf cfg.enable {
     # Enable qBittorrent stack. Attach Gluetun to the streaming network when the VPN is enabled, otherwise qBittorrent directly
@@ -225,6 +248,21 @@ in {
           ];
         };
       })
+      (lib.mkIf (cfg.radarr.enable && cfg.radarr.oidc.enable) {
+        oidc.clients.${radarrName} = {
+          client_name = radarrDisplayName;
+          client_secret = cfg.radarr.oidc.clientSecretHash;
+          public = false;
+          authorization_policy = config.nps.stacks.authelia.defaultAllowPolicy;
+          require_pkce = true;
+          pkce_challenge_method = "S256";
+          pre_configured_consent_duration = config.nps.stacks.authelia.oidc.defaultConsentDuration;
+          token_endpoint_auth_method = "client_secret_post";
+          redirect_uris = [
+            "${cfg.containers.${radarrName}.traefik.serviceUrl}/signin-oidc"
+          ];
+        };
+      })
     ];
 
     services.podman.containers =
@@ -294,7 +332,7 @@ in {
           };
 
         ${seerrName} = lib.mkIf cfg.seerr.enable {
-          image = "ghcr.io/seerr-team/seerr:v3.5.1";
+          image = "ghcr.io/seerr-team/seerr:v3.5.2";
           user = "${toString config.nps.defaultUid}:${toString config.nps.defaultGid}";
           volumeMap.config = "${storage}/${seerrName}/config:/app/config";
           environment.PORT = 5055;
@@ -311,7 +349,7 @@ in {
         };
 
         ${maintainerrName} = lib.mkIf cfg.maintainerr.enable {
-          image = "ghcr.io/maintainerr/maintainerr:3.31.0";
+          image = "ghcr.io/maintainerr/maintainerr:3.33.0";
           user = "${toString config.nps.defaultUid}:${toString config.nps.defaultGid}";
           volumeMap = {
             data = "${storage}/${maintainerrName}/data:/opt/data";
@@ -389,19 +427,37 @@ in {
             homepage.settings.widget.type = "sonarr";
           });
 
-        ${radarrName} = lib.mkIf cfg.radarr.enable (arrlib.mkArrBase radarrName
-          // {
-            image = "lscr.io/linuxserver/radarr:6.4.4";
-            port = 7878;
+        ${radarrName} = let
+          base = arrlib.mkArrBase radarrName;
+        in
+          lib.mkMerge [
+            (lib.mkIf cfg.radarr.enable (base
+              // {
+                image = "lscr.io/linuxserver/radarr:7.0.3";
+                port = 7878;
+                wantsContainer = base.wantsContainer ++ lib.optional cfg.radarr.oidc.enable "authelia";
 
-            dashboard = {
-              inherit category;
-              name = radarrDisplayName;
-              description = radarrDescription;
-              icon = "di:radarr";
-            };
-            homepage.settings.widget.type = "radarr";
-          });
+                dashboard = {
+                  inherit category;
+                  name = radarrDisplayName;
+                  description = radarrDescription;
+                  icon = "di:radarr";
+                };
+                homepage.settings.widget.type = "radarr";
+              }))
+            (lib.mkIf (cfg.radarr.enable && cfg.radarr.oidc.enable) {
+              extraEnv = {
+                RADARR__AUTH__METHOD = "Oidc";
+                RADARR__AUTH__REQUIRED = "Enabled";
+                RADARR__AUTH__OIDCAUTHORITY = config.nps.containers.authelia.traefik.serviceUrl;
+                RADARR__AUTH__OIDCCLIENTID = radarrName;
+                RADARR__AUTH__OIDCCLIENTSECRET.fromFile = cfg.radarr.oidc.clientSecretFile;
+                RADARR__AUTH__OIDCUSERIDENTIFIER = cfg.radarr.oidc.userEmail;
+                RADARR__AUTH__OIDCSCOPES = "openid profile email";
+                RADARR__SERVER__TRUSTEDNETWORKS = config.nps.stacks.traefik.network.subnet;
+              };
+            })
+          ];
 
         ${bazarrName} = lib.mkIf cfg.bazarr.enable (arrlib.mkArrBase bazarrName
           // {

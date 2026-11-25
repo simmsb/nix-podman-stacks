@@ -13,7 +13,7 @@
   category = "General";
   description = "3D Printer Management";
   displayName = "Bambuddy";
-  icon = "https://raw.githubusercontent.com/maziggy/bambuddy/v1.2.5.7/static/img/bambuddy_logo_dark_transparent.png";
+  icon = "sh:bambuddy";
   roleGroups = [cfg.oidc.adminGroup cfg.oidc.operatorGroup cfg.oidc.viewerGroup];
 in {
   imports = import ../mkAliases.nix config lib name [name orcaName bambuName];
@@ -115,8 +115,8 @@ in {
 
     services.podman.containers = {
       ${name} = {
-        # renovate: versioning=regex:^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.(?<build>\d+)$
-        image = "ghcr.io/maziggy/bambuddy:1.2.5.7";
+        # renovate: versioning=regex:^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:\.(?<build>\d+))?$
+        image = "ghcr.io/maziggy/bambuddy:1.3.2";
         volumeMap = {
           data = "${storage}/data:/app/data";
           logs = "${storage}/logs:/app/logs";
@@ -185,8 +185,8 @@ in {
       };
 
       ${orcaName} = lib.mkIf cfg.orcaSlicer.enable {
-        # renovate: versioning=regex:^bambuddy-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.(?<build>\d+)$
-        image = "ghcr.io/maziggy/orca-slicer-api:bambuddy-1.2.5.7";
+        # renovate: versioning=regex:^bambuddy-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:\.(?<build>\d+))?$
+        image = "ghcr.io/maziggy/orca-slicer-api:bambuddy-1.3.2";
         volumeMap.data = "${storage}/orca-slicer:/app/data";
         environment = {
           NODE_ENV = "production";
@@ -202,8 +202,8 @@ in {
       };
 
       ${bambuName} = lib.mkIf cfg.bambuStudio.enable {
-        # renovate: versioning=regex:^bambuddy-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\.(?<build>\d+)$
-        image = "ghcr.io/maziggy/bambu-studio-api:bambuddy-1.2.5.7";
+        # renovate: versioning=regex:^bambuddy-(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(?:\.(?<build>\d+))?$
+        image = "ghcr.io/maziggy/bambu-studio-api:bambuddy-1.3.2";
         volumeMap.data = "${storage}/bambu-studio:/app/data";
         environment = {
           NODE_ENV = "production";

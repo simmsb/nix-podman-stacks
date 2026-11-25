@@ -137,7 +137,7 @@ in {
 
     services.podman.containers = {
       ${name} = {
-        image = "ghcr.io/omnigent-ai/omnigent-server:v0.20.0";
+        image = "ghcr.io/omnigent-ai/omnigent-server:v0.23.0";
         volumeMap.data = "${storage}/data:/data";
 
         environment = {
@@ -178,7 +178,7 @@ in {
 
       ${dbName} = lib.mkIf (cfg.db.type == "postgres") {
         image = "docker.io/postgres:18";
-        volumeMap.data = "${storage}/postgres:/var/lib/postgresql/data";
+        volumeMap.data = "${storage}/postgres:/var/lib/postgresql";
         extraEnv = {
           POSTGRES_DB = name;
           POSTGRES_USER = cfg.db.username;

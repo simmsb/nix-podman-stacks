@@ -26,6 +26,23 @@ in {
     stacks = {
       adguard.enable = true;
 
+      agentgateway = {
+        enable = true;
+        settings = {
+          config = {
+            database.url = "sqlite:///config/data.db";
+            session = {
+              key = "$SESSION_KEY";
+            };
+          };
+          gateways.default.port = 4000;
+          ui.gateways = "default";
+          llm.gateways = "default";
+          mcp.gateways = "default";
+        };
+        extraEnv.SESSION_KEY.fromFile = dummySecretFile;
+      };
+
       adventurelog = {
         enable = true;
         secretKeyFile = dummySecretFile;
@@ -983,13 +1000,24 @@ in {
           useSabnzbd = true;
           maintainerr.enable = true;
         }
-        // lib.genAttrs ["sonarr" "radarr" "bazarr"] (name: {
-          db = {
-            type = "postgres";
-            passwordFile = dummySecretFile;
-          };
-          extraEnv."${lib.toUpper name}__AUTH__APIKEY".fromFile = dummySecretFile;
-        });
+        // lib.genAttrs ["sonarr" "radarr" "bazarr"] (
+          name:
+            {
+              db = {
+                type = "postgres";
+                passwordFile = dummySecretFile;
+              };
+              extraEnv."${lib.toUpper name}__AUTH__APIKEY".fromFile = dummySecretFile;
+            }
+            // lib.optionalAttrs (name == "radarr") {
+              oidc = {
+                enable = true;
+                clientSecretFile = dummySecretFile;
+                clientSecretHash = dummyClientSecretHash;
+                userEmail = dummyEmail;
+              };
+            }
+        );
 
       super-productivity = {
         enable = true;
